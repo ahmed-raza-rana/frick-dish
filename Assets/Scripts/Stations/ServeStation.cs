@@ -3,14 +3,22 @@ using UnityEngine;
 public class ServeStation : StationBase
 {
     public ParticleSystem sparkleFX;
-    public int timer;
-    public override void Enter() => Debug.Log("Prep Start");
+    public OrderManager orderManager;
+    public Dish currentDish;
+
+    public override void Enter() => Debug.Log("Serve Active");
+    public override void Exit() { }
 
     public override void Action()
     {
-        sparkleFX?.Play();
-        GameManager.I.AddScore(10);
-    }
+        if (currentDish == null)
+        {
+            Debug.Log("No dish prepared!");
+            return;
+        }
 
-    public override void Exit() => Debug.Log("Prep Exit");
+        sparkleFX.Play();
+        orderManager.CompleteOrder(currentDish);
+        currentDish = null;
+    }
 }

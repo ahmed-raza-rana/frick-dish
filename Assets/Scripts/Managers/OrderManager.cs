@@ -3,26 +3,44 @@ using System.Collections.Generic;
 
 public class OrderManager : MonoBehaviour
 {
-    public Dish[] dishes;
-    public Transform orderParent;
+    [Header("Order Settings")]
+    public Dish[] dishLibrary;
     public GameObject orderUIPrefab;
-    List<Dish> active = new();
+    public Transform orderParent;
+    public int maxOrders = 3;
+    public float orderSpawnGap = 5f;
 
-    void Start() => SpawnOrder();
+    private List<OrderUI> activeOrders = new();
+
+    void Start()
+    {
+        InvokeRepeating(nameof(SpawnOrder), 1f, orderSpawnGap);
+    }
 
     void SpawnOrder()
     {
-        Dish d = dishes[Random.Range(0, dishes.Length)];
-        active.Add(d);
-        Instantiate(orderUIPrefab, orderParent).GetComponent<OrderUI>().Setup(d);
+        if (activeOrders.Count >= maxOrders) return;
+
+        Dish d = dishLibrary[Random.Range(0, dishLibrary.Length)];
+        GameObject obj = Instantiate(orderUIPrefab, orderParent);
+        OrderUI ui = obj.GetComponent<OrderUI>();
+        ui.Setup(d);
+        activeOrders.Add(ui);
     }
 
-    public void Serve(Dish d)
+    public void CompleteOrder(Dish dish)
     {
-        if (active.Contains(d))
+        // Match dish from queue
+        for (int i = 0; i < activeOrders.Count; i++)
         {
-            active.Remove(d);
-            GameManager.I.AddScore(d.points);
+            if (activeOrders[i].dish == dish)
+            {
+                activeOrders[i].Complete();
+                activeOrders.RemoveAt(i);
+                int points = dish.isSpecial ? dish.scoreValue * 2 : dish.scoreValue;
+                GameManager.I.AddScore(points);
+                break;
+            }
         }
     }
 }

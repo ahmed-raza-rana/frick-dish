@@ -1,15 +1,18 @@
 using UnityEngine;
 
-public class PrepStation : StationBase
-{
+public class PrepStation : StationBase {
+    public Animator knifeAnim;
     public ParticleSystem chopFX;
-    public override void Enter() => Debug.Log("Prep Start");
+    public Transform spawnPoint;
+    public GameObject ingredientPrefab;
 
-    public override void Action()
-    {
-        chopFX?.Play();
+    public override void Enter() => Debug.Log("Prep Active");
+    public override void Exit() { }
+
+    public override void Action() {
+        knifeAnim.SetTrigger("Chop");
+        chopFX.Play();
+        Instantiate(ingredientPrefab, spawnPoint.position, Quaternion.identity);
         GameManager.I.AddScore(10);
     }
-
-    public override void Exit() => Debug.Log("Prep Exit");
 }

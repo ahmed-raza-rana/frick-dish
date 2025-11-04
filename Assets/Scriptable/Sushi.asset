@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Dish
   dishName: Sushi
   icon: {fileID: 0}
-  points: 0
   cookTime: 0
+  scoreValue: 30
+  isSpecial: 0
+  rawPrefab: {fileID: 3893827382209966922, guid: 3d199b801aa0c53418e757103f43ed67, type: 3}
+  cookedPrefab: {fileID: 0}

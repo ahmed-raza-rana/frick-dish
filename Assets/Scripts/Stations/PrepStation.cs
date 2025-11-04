@@ -13,17 +13,25 @@ public class PrepStation : StationBase
     {
     }
 
-    public override void Action()
+   public override void Action()
+{
+    knifeAnim.SetTrigger("Chop");
+    chopFX.Play();
+    GameManager.I.AddScore(10);
+
+    // Get current dish
+    var dish = GameManager.I.currentDish;
+    if (dish == null)
     {
-        knifeAnim.SetTrigger("Chop");
-        chopFX.Play();
-        GameManager.I.AddScore(10);
-
-        // Choose a random dish from OrderManager
-        OrderManager orderMgr = FindObjectOfType<OrderManager>();
-        Dish dish = orderMgr.dishLibrary[Random.Range(0, orderMgr.dishLibrary.Length)];
+        // fallback if no dish set
+        dish = FindObjectOfType<OrderManager>().dishLibrary[0];
         GameManager.I.currentDish = dish;
-
-        Debug.Log($"Prepared {dish.dishName} — ready to cook!");
     }
+
+    // Spawn its raw version
+    if (dish.rawPrefab && spawnPoint)
+        Instantiate(dish.rawPrefab, spawnPoint.position, Quaternion.identity);
+
+    Debug.Log($"Prepared {dish.dishName} (raw)");
+}
 }

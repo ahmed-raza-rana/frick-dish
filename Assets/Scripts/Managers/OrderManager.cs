@@ -22,7 +22,7 @@ public class OrderManager : MonoBehaviour
     {
         if (activeOrders.Count >= maxOrders) return;
 
-        Dish d = dishLibrary[Random.Range(0, dishLibrary.Length)];
+        Dish d = dishLibrary[0];
         GameObject obj = Instantiate(orderUIPrefab, orderParent);
         OrderUI ui = obj.GetComponent<OrderUI>();
         ui.Setup(d);

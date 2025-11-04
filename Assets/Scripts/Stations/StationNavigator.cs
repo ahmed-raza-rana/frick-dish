@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 public class StationNavigator : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class StationNavigator : MonoBehaviour
     public Button prevButton;
     public Button actionButton;
     public TMP_Text actionButtonText;
+    
+    
 
     void Start()
     {
@@ -52,12 +55,16 @@ public class StationNavigator : MonoBehaviour
     {
         GameObject current = stations[i];
         current.SetActive(true);
-
         StationBase station = current.GetComponent<StationBase>();
         station.Enter();
 
-        // Update Action Button
-        actionButtonText.text = stationNames[i].ToUpper();
+        // animate text
+        actionButtonText.DOFade(0f, 0.15f).OnComplete(() =>
+        {
+            actionButtonText.text = stationNames[i].ToUpper();
+            actionButtonText.DOFade(1f, 0.15f);
+        });
+
         actionButton.onClick.RemoveAllListeners();
         actionButton.onClick.AddListener(() => station.Action());
     }

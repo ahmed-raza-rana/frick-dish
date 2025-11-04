@@ -5,6 +5,9 @@ public class ServeStation : StationBase
     public ParticleSystem sparkleFX;
     public OrderManager orderManager;
     public Dish currentDish;
+    
+    public AudioSource sfxServe;
+    public AudioClip serveGood, serveFail;
 
     public override void Enter() => Debug.Log("Serve Active");
     public override void Exit() { }
@@ -13,12 +16,16 @@ public class ServeStation : StationBase
     {
         if (currentDish == null)
         {
-            Debug.Log("No dish prepared!");
+            Debug.Log("No cooked dish to serve!");
             return;
         }
 
         sparkleFX.Play();
         orderManager.CompleteOrder(currentDish);
+        GameManager.I.AddScore(30);
+
+        Debug.Log($"Served {currentDish.dishName}!");
         currentDish = null;
+        GameManager.I.currentDish = null;
     }
 }

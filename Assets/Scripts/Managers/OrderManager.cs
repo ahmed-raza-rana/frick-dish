@@ -14,7 +14,8 @@ public class OrderManager : MonoBehaviour
 
     void Start()
     {
-        InvokeRepeating(nameof(SpawnOrder), 1f, orderSpawnGap);
+        SpawnOrder(); // immediate first order
+        //InvokeRepeating(nameof(SpawnOrder), orderSpawnGap, orderSpawnGap);
     }
 
     void SpawnOrder()

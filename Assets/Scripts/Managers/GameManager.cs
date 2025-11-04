@@ -7,6 +7,10 @@ public class GameManager : MonoBehaviour
 
     [Header("UI")] public TMP_Text timerText;
     public TMP_Text scoreText;
+    
+    public GameObject endLevelPanel;   // assign a simple UI panel in inspector
+    public Dish currentDish;
+    public TMP_Text resultText;
 
     [Header("Gameplay")] public float levelTime = 60;
     public int scoreTarget = 100;
@@ -44,6 +48,15 @@ public class GameManager : MonoBehaviour
     public void EndLevel()
     {
         active = false;
-        Debug.Log($"Level Ended — Score:{score}");
+
+        string outcome = score >= scoreTarget ? "SUCCESS!" : "FAILED!";
+        Debug.Log($"Level Ended — Score:{score}/{scoreTarget} ({outcome})");
+
+        if (endLevelPanel)
+        {
+            endLevelPanel.SetActive(true);
+            if (resultText)
+                resultText.text = $"Score: {score}\nTarget: {scoreTarget}\n{outcome}";
+        }
     }
 }
